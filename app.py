@@ -5,10 +5,10 @@ import plotly.graph_objects as go
 import io
 from datetime import datetime
 
-# ==========================================
-# 1. EMBEDDED DATASET (100 Rows)
-# ==========================================
-csv_data = """User_ID,Full_Name,Email_Address,Phone_Number,City,State,Product_Category,Product_Name,Order_Date,Order_Amount_INR,Payment_Method,Delivery_Status
+==========================================
+EMBEDDED DATASET (100 Rows)
+==========================================
+csvdata = """UserID,FullName,EmailAddress,PhoneNumber,City,State,ProductCategory,ProductName,OrderDate,OrderAmountINR,PaymentMethod,DeliveryStatus
 USR1001,Ravi Iyer,ravi.iyer26@email.com,+91 8181241943,Chennai,Tamil Nadu,Electronics,Smartphone 5G,2026-10-05 23:06,44647,Cash on Delivery,Delivered
 USR1002,Aadhya Verma,aadhya.verma31@email.com,+91 7402418010,Chennai,Tamil Nadu,Electronics,Smartphone 5G,2026-10-17 19:01,37080,Credit Card,Shipped
 USR1003,Lakshmi Desai,lakshmi.desai430@email.com,+91 7946785248,Pune,Maharashtra,Pooja Items,Premium Incense Sticks & Camphor Kit,2026-10-09 00:48,10762,Net Banking,Delivered
@@ -110,164 +110,665 @@ USR1098,Kavya Menon,kavya.menon887@email.com,+91 7638212450,Pune,Maharashtra,Poo
 USR1099,Sunita Gupta,sunita.gupta891@email.com,+91 7810255760,Jaipur,Rajasthan,Electronics,Smartphone 5G,2026-10-19 12:14,27219,UPI,Delivered
 USR1100,Ananya Rao,ananya.rao396@email.com,+91 9850521812,Coimbatore,Tamil Nadu,Electronics,Smart LED TV 43 inch,2026-10-16 01:08,33217,Cash on Delivery,Delivered"""
 
-# ==========================================
-# 2. DATA LOADING & PREPROCESSING
-# ==========================================
+==========================================
+DATA LOADING & PREPROCESSING
+==========================================
 @st.cache_data
 def load_data():
-    df = pd.read_csv(io.StringIO(csv_data))
-    df['Order_Date'] = pd.to_datetime(df['Order_Date'])
+    df = pd.readcsv(io.StringIO(csvdata))
+    df['OrderDate'] = pd.todatetime(df['Order_Date'])
     return df
 
 df = load_data()
 
-# ==========================================
-# 3. STREAMLIT PAGE CONFIG & THEME
-# ==========================================
-st.set_page_config(page_title="Dasara 2026 E-commerce Dashboard", page_icon="🪔", layout="wide")
+==========================================
+STREAMLIT PAGE CONFIG & FUTURISTIC THEME
+==========================================
+st.setpageconfig(
+    page_title="Dasara 2026 Analytics Hub",
+    page_icon="🪔",
+    layout="wide",
+    initialsidebarstate="expanded"
+)
 
-# Custom CSS for Festive Theme
+Futuristic Dark Theme with Neon Accents
 st.markdown("""
-    <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #C41E3A; /* Deep Red */
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        font-size: 1.1rem;
-        color: #555;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .stMetric {
-        background-color: #FFF8E7; /* Light Gold/Cream */
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 5px solid #FF9933; /* Marigold Orange */
-    }
-    </style>
-""", unsafe_allow_html=True)
 
-st.markdown('<div class="main-header">🪔 Dasara 2026 Festive Sales Dashboard</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Real-time analytics for Traditional Wear, Pooja Items, Electronics & More</div>', unsafe_allow_html=True)
+/ Import Modern Fonts /
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-# ==========================================
-# 4. SIDEBAR FILTERS
-# ==========================================
-st.sidebar.header("🔍 Filter Data")
+/ Global Background - Dark Gradient /
+.stApp {
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+    color: #e4e6eb;
+}
 
-# Date Range Filter
-min_date = df['Order_Date'].min().date()
-max_date = df['Order_Date'].max().date()
-selected_dates = st.sidebar.date_input("Order Date Range", [min_date, max_date], min_value=min_date, max_value=max_date)
+/ Main Container /
+.main .block-container {
+    padding: 2rem 3rem;
+    max-width: 1600px;
+}
 
-# Categorical Filters
-states = st.sidebar.multiselect("State", options=sorted(df['State'].unique()), default=sorted(df['State'].unique()))
-categories = st.sidebar.multiselect("Product Category", options=sorted(df['Product_Category'].unique()), default=sorted(df['Product_Category'].unique()))
-payment_methods = st.sidebar.multiselect("Payment Method", options=sorted(df['Payment_Method'].unique()), default=sorted(df['Payment_Method'].unique()))
-delivery_status = st.sidebar.multiselect("Delivery Status", options=sorted(df['Delivery_Status'].unique()), default=sorted(df['Delivery_Status'].unique()))
+/ Header Styling /
+.main-header {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00d4ff 0%, #ff006e 50%, #ffd700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
 
-# Apply Filters
+.sub-header {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #8b92a8;
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+/ Glassmorphism Cards /
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.15);
+}
+
+/ KPI Metric Cards /
+.stMetric {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(255, 0, 110, 0.08) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stMetric:hover {
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 0 6px 30px rgba(0, 212, 255, 0.2);
+}
+
+.stMetric label {
+    color: #8b92a8 !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stMetric .metric-value {
+    color: #00d4ff !important;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/ Sidebar /
+.css-1d391kg {
+    background: rgba(10, 14, 39, 0.95);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.css-1d391kg .stSelectbox label,
+.css-1d391kg .stDateInput label,
+.css-1d391kg .stMultiselect label {
+    color: #00d4ff !important;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+/ Section Headers /
+.section-header {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #00d4ff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/ Chart Containers /
+.stPlotlyChart {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/ Status Badges /
+.status-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-delivered {
+    background: rgba(40, 180, 99, 0.2);
+    color: #28b463;
+    border: 1px solid rgba(40, 180, 99, 0.3);
+}
+
+.status-shipped {
+    background: rgba(46, 134, 193, 0.2);
+    color: #2e86c1;
+    border: 1px solid rgba(46, 134, 193, 0.3);
+}
+
+.status-pending {
+    background: rgba(255, 153, 51, 0.2);
+    color: #ff9933;
+    border: 1px solid rgba(255, 153, 51, 0.3);
+}
+
+.status-cancelled {
+    background: rgba(196, 30, 58, 0.2);
+    color: #c41e3a;
+    border: 1px solid rgba(196, 30, 58, 0.3);
+}
+
+/ Tabs /
+.stTabs [data-baseweb="tab-list"] {
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #8b92a8;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(255, 0, 110, 0.15) 100%);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+/ Expander /
+.streamlit-expanderHeader {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #00d4ff !important;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}
+
+/ Dataframe /
+.dataframe {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+/ Scrollbar /
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00d4ff 0%, #ff006e 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00b8d9 0%, #e6005c 100%);
+}
+
+/ Animations /
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+}
+
+.glow-effect {
+    animation: glow 3s ease-in-out infinite;
+}
+
+/ Divider /
+.stDivider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 2rem 0;
+}
+
+""", unsafeallowhtml=True)
+
+Header
+st.markdown('🪔 Dasara 2026 Analytics Hub', unsafeallowhtml=True)
+st.markdown('Real-time insights for Traditional Wear, Pooja Items, Electronics & More', unsafeallowhtml=True)
+
+==========================================
+SIDEBAR FILTERS
+==========================================
+st.sidebar.markdown("## 🔍 Filter Controls")
+st.sidebar.markdown("---")
+
+Date Range Filter
+mindate = df['OrderDate'].min().date()
+maxdate = df['OrderDate'].max().date()
+selecteddates = st.sidebar.dateinput(
+    "📅 Order Date Range",
+    [mindate, maxdate],
+    minvalue=mindate,
+    maxvalue=maxdate
+)
+
+Categorical Filters
+st.sidebar.markdown("### 📍 Location")
+states = st.sidebar.multiselect(
+    "State",
+    options=sorted(df['State'].unique()),
+    default=sorted(df['State'].unique())
+)
+
+st.sidebar.markdown("### 🛍️ Products")
+categories = st.sidebar.multiselect(
+    "Product Category",
+    options=sorted(df['Product_Category'].unique()),
+    default=sorted(df['Product_Category'].unique())
+)
+
+st.sidebar.markdown("### 💳 Payment")
+payment_methods = st.sidebar.multiselect(
+    "Payment Method",
+    options=sorted(df['Payment_Method'].unique()),
+    default=sorted(df['Payment_Method'].unique())
+)
+
+st.sidebar.markdown("### 🚚 Delivery")
+delivery_status = st.sidebar.multiselect(
+    "Delivery Status",
+    options=sorted(df['Delivery_Status'].unique()),
+    default=sorted(df['Delivery_Status'].unique())
+)
+
+Apply Filters
 filtered_df = df[
-    (df['Order_Date'].dt.date >= selected_dates[0]) &
-    (df['Order_Date'].dt.date <= selected_dates[1]) &
-    (df['State'].isin(states)) &
-    (df['Product_Category'].isin(categories)) &
-    (df['Payment_Method'].isin(payment_methods)) &
-    (df['Delivery_Status'].isin(delivery_status))
-]
+    (df['OrderDate'].dt.date >= selecteddates[0]) &
+    (df['OrderDate'].dt.date  0 else 0
+deliveredcount = len(filtereddf[filtereddf['DeliveryStatus'] == 'Delivered'])
+deliveryrate = (deliveredcount / totalorders * 100) if totalorders > 0 else 0
 
-# ==========================================
-# 5. KPI METRICS
-# ==========================================
-total_revenue = filtered_df['Order_Amount_INR'].sum()
-total_orders = len(filtered_df)
-aov = filtered_df['Order_Amount_INR'].mean() if total_orders > 0 else 0
-delivered_count = len(filtered_df[filtered_df['Delivery_Status'] == 'Delivered'])
-delivery_rate = (delivered_count / total_orders * 100) if total_orders > 0 else 0
-
+st.markdown("### 📊 Key Performance Indicators")
 col1, col2, col3, col4 = st.columns(4)
+
 with col1:
-    st.metric(label="💰 Total Revenue", value=f"₹{total_revenue:,.0f}")
+    st.markdown(f"""
+    
+        💰
+        Total Revenue
+        ₹{total_revenue:,.0f}
+    
+    """, unsafeallowhtml=True)
+
 with col2:
-    st.metric(label="📦 Total Orders", value=f"{total_orders:,}")
+    st.markdown(f"""
+    
+        📦
+        Total Orders
+        {total_orders:,}
+    
+    """, unsafeallowhtml=True)
+
 with col3:
-    st.metric(label="📊 Avg. Order Value", value=f"₹{aov:,.0f}")
+    st.markdown(f"""
+    
+        📊
+        Avg Order Value
+        ₹{aov:,.0f}
+    
+    """, unsafeallowhtml=True)
+
 with col4:
-    st.metric(label="✅ Delivery Success Rate", value=f"{delivery_rate:.1f}%")
+    st.markdown(f"""
+    
+        ✅
+        Delivery Success
+        {delivery_rate:.1f}%
+    
+    """, unsafeallowhtml=True)
 
 st.markdown("---")
 
-# ==========================================
-# 6. VISUALIZATIONS
-# ==========================================
-# Festive Color Palette
-festive_colors = ["#C41E3A", "#FF9933", "#FFD700", "#2E86C1", "#28B463", "#8E44AD"]
+==========================================
+TABBED VISUALIZATIONS
+==========================================
+tab1, tab2, tab3 = st.tabs(["📈 Sales Analytics", "🗺️ Geographic Insights", "🛍️ Product Performance"])
 
-# Row 1: Sales Trend & Geographic Performance
-col_chart1, col_chart2 = st.columns(2)
+Festive Color Palette
+festive_colors = ["#00d4ff", "#ff006e", "#ffd700", "#2e86c1", "#28b463", "#8e44ad"]
 
-with col_chart1:
-    st.subheader("📈 Daily Sales Trend")
-    daily_sales = filtered_df.groupby(filtered_df['Order_Date'].dt.date)['Order_Amount_INR'].sum().reset_index()
-    daily_sales.columns = ['Date', 'Revenue']
-    fig_trend = px.line(daily_sales, x='Date', y='Revenue', markers=True, 
-                        color_discrete_sequence=["#C41E3A"])
-    fig_trend.update_layout(xaxis_title="Date", yaxis_title="Revenue (₹)", hovermode="x unified")
-    st.plotly_chart(fig_trend, use_container_width=True)
+with tab1:
+    st.markdown("### 📈 Sales Trends & Patterns")
+    
+    colchart1, colchart2 = st.columns(2)
+    
+    with col_chart1:
+        st.markdown("#### Daily Revenue Trend")
+        dailysales = filtereddf.groupby(filtereddf['OrderDate'].dt.date)['OrderAmountINR'].sum().reset_index()
+        daily_sales.columns = ['Date', 'Revenue']
+        
+        fig_trend = go.Figure()
+        figtrend.addtrace(go.Scatter(
+            x=daily_sales['Date'],
+            y=daily_sales['Revenue'],
+            mode='lines+markers',
+            line=dict(color='#00d4ff', width=3),
+            marker=dict(size=8, color='#ff006e', line=dict(width=2, color='#00d4ff')),
+            fill='tozeroy',
+            fillcolor='rgba(0, 212, 255, 0.1)'
+        ))
+        
+        figtrend.updatelayout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            xaxis=dict(gridcolor='rgba(255,255,255,0.05)', title='Date'),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.05)', title='Revenue (₹)'),
+            hovermode='x unified',
+            height=400
+        )
+        st.plotlychart(figtrend, usecontainerwidth=True)
+    
+    with col_chart2:
+        st.markdown("#### Revenue by State")
+        statesales = filtereddf.groupby('State')['OrderAmountINR'].sum().resetindex().sortvalues(by='OrderAmountINR', ascending=True)
+        
+        fig_state = go.Figure()
+        figstate.addtrace(go.Bar(
+            x=statesales['OrderAmount_INR'],
+            y=state_sales['State'],
+            orientation='h',
+            marker=dict(
+                color=statesales['OrderAmount_INR'],
+                colorscale='Viridis',
+                showscale=False
+            )
+        ))
+        
+        figstate.updatelayout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            xaxis=dict(gridcolor='rgba(255,255,255,0.05)', title='Revenue (₹)'),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.05)'),
+            height=400
+        )
+        st.plotlychart(figstate, usecontainerwidth=True)
 
-with col_chart2:
-    st.subheader("🗺️ Revenue by State")
-    state_sales = filtered_df.groupby('State')['Order_Amount_INR'].sum().reset_index().sort_values(by='Order_Amount_INR', ascending=True)
-    fig_state = px.bar(state_sales, x='Order_Amount_INR', y='State', orientation='h',
-                       color='State', color_discrete_sequence=festive_colors)
-    fig_state.update_layout(xaxis_title="Revenue (₹)", yaxis_title="State", showlegend=False)
-    st.plotly_chart(fig_state, use_container_width=True)
+with tab2:
+    st.markdown("### 🗺️ Geographic Distribution")
+    
+    colchart3, colchart4 = st.columns(2)
+    
+    with col_chart3:
+        st.markdown("#### Orders by State")
+        stateorders = filtereddf.groupby('State').size().reset_index(name='Orders')
+        stateorders = stateorders.sort_values('Orders', ascending=False)
+        
+        figstateorders = go.Figure(data=[go.Pie(
+            labels=state_orders['State'],
+            values=state_orders['Orders'],
+            hole=0.4,
+            marker=dict(colors=festive_colors),
+            textinfo='label+percent',
+            textposition='inside'
+        )])
+        
+        figstateorders.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            height=400
+        )
+        st.plotlychart(figstateorders, usecontainer_width=True)
+    
+    with col_chart4:
+        st.markdown("#### Top Cities by Revenue")
+        citysales = filtereddf.groupby('City')['OrderAmountINR'].sum().reset_index()
+        citysales = citysales.sortvalues('OrderAmount_INR', ascending=True).tail(10)
+        
+        fig_city = go.Figure()
+        figcity.addtrace(go.Bar(
+            x=citysales['OrderAmount_INR'],
+            y=city_sales['City'],
+            orientation='h',
+            marker=dict(
+                color=citysales['OrderAmount_INR'],
+                colorscale='Plasma',
+                showscale=False
+            )
+        ))
+        
+        figcity.updatelayout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            xaxis=dict(gridcolor='rgba(255,255,255,0.05)', title='Revenue (₹)'),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.05)'),
+            height=400
+        )
+        st.plotlychart(figcity, usecontainerwidth=True)
 
-# Row 2: Category Breakdown & Top 5 Products
-col_chart3, col_chart4 = st.columns(2)
+with tab3:
+    st.markdown("### 🛍️ Product & Category Analysis")
+    
+    colchart5, colchart6 = st.columns(2)
+    
+    with col_chart5:
+        st.markdown("#### Revenue by Category")
+        catsales = filtereddf.groupby('ProductCategory')['OrderAmountINR'].sum().resetindex()
+        
+        fig_cat = go.Figure(data=[go.Pie(
+            labels=catsales['ProductCategory'],
+            values=catsales['OrderAmount_INR'],
+            hole=0.5,
+            marker=dict(colors=festive_colors),
+            textinfo='label+percent+value',
+            textposition='inside',
+            textfont=dict(size=12)
+        )])
+        
+        figcat.updatelayout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            height=400
+        )
+        st.plotlychart(figcat, usecontainerwidth=True)
+    
+    with col_chart6:
+        st.markdown("#### Top 5 Products")
+        productsales = filtereddf.groupby('ProductName')['OrderAmountINR'].sum().resetindex()
+        productsales = productsales.sortvalues('OrderAmount_INR', ascending=True).tail(5)
+        
+        fig_prod = go.Figure()
+        figprod.addtrace(go.Bar(
+            x=productsales['OrderAmount_INR'],
+            y=productsales['ProductName'],
+            orientation='h',
+            marker=dict(
+                color=['#00d4ff', '#ff006e', '#ffd700', '#28b463', '#8e44ad'],
+                showscale=False
+            )
+        ))
+        
+        figprod.updatelayout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e4e6eb', family='Inter'),
+            xaxis=dict(gridcolor='rgba(255,255,255,0.05)', title='Revenue (₹)'),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.05)'),
+            height=400
+        )
+        st.plotlychart(figprod, usecontainerwidth=True)
 
-with col_chart3:
-    st.subheader("🥧 Revenue by Product Category")
-    cat_sales = filtered_df.groupby('Product_Category')['Order_Amount_INR'].sum().reset_index()
-    fig_cat = px.pie(cat_sales, values='Order_Amount_INR', names='Product_Category',
-                     color_discrete_sequence=festive_colors, hole=0.4)
-    fig_cat.update_traces(textposition='inside', textinfo='percent+label')
-    st.plotly_chart(fig_cat, use_container_width=True)
+st.markdown("---")
 
-with col_chart4:
-    st.subheader("🏆 Top 5 Best-Selling Products")
-    product_sales = filtered_df.groupby('Product_Name')['Order_Amount_INR'].sum().reset_index().sort_values(by='Order_Amount_INR', ascending=True).tail(5)
-    fig_prod = px.bar(product_sales, x='Order_Amount_INR', y='Product_Name', orientation='h',
-                      color='Product_Name', color_discrete_sequence=festive_colors)
-    fig_prod.update_layout(xaxis_title="Revenue (₹)", yaxis_title="Product", showlegend=False)
-    st.plotly_chart(fig_prod, use_container_width=True)
+==========================================
+PAYMENT & DELIVERY ANALYSIS
+==========================================
+st.markdown("### 💳 Payment & Delivery Insights")
 
-# Row 3: Payment Preferences & Operational Health
-col_chart5, col_chart6 = st.columns(2)
+colchart7, colchart8 = st.columns(2)
 
-with col_chart5:
-    st.subheader("💳 Payment Method Distribution")
-    payment_counts = filtered_df['Payment_Method'].value_counts().reset_index()
+with col_chart7:
+    st.markdown("#### Payment Method Distribution")
+    paymentcounts = filtereddf['PaymentMethod'].valuecounts().reset_index()
     payment_counts.columns = ['Payment Method', 'Count']
-    fig_pay = px.donut(payment_counts, values='Count', names='Payment Method',
-                       color_discrete_sequence=festive_colors, hole=0.5)
-    st.plotly_chart(fig_pay, use_container_width=True)
+    
+    fig_pay = go.Figure(data=[go.Pie(
+        labels=payment_counts['Payment Method'],
+        values=payment_counts['Count'],
+        hole=0.5,
+        marker=dict(colors=festive_colors),
+        textinfo='label+percent',
+        textposition='inside'
+    )])
+    
+    figpay.updatelayout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#e4e6eb', family='Inter'),
+        height=350
+    )
+    st.plotlychart(figpay, usecontainerwidth=True)
 
-with col_chart6:
-    st.subheader("🚚 Delivery Status Overview")
-    status_counts = filtered_df['Delivery_Status'].value_counts().reset_index()
+with col_chart8:
+    st.markdown("#### Delivery Status Breakdown")
+    statuscounts = filtereddf['DeliveryStatus'].valuecounts().reset_index()
     status_counts.columns = ['Status', 'Count']
-    fig_status = px.pie(status_counts, values='Count', names='Status',
-                        color_discrete_sequence=["#28B463", "#2E86C1", "#FF9933", "#C41E3A"]) # Custom mapped colors
-    fig_status.update_traces(textposition='inside', textinfo='percent+label')
-    st.plotly_chart(fig_status, use_container_width=True)
+    
+    status_colors = {
+        'Delivered': '#28b463',
+        'Shipped': '#2e86c1',
+        'Pending': '#ff9933',
+        'Cancelled': '#c41e3a'
+    }
+    
+    fig_status = go.Figure(data=[go.Pie(
+        labels=status_counts['Status'],
+        values=status_counts['Count'],
+        hole=0.5,
+        marker=dict(colors=[statuscolors.get(s, '#8b92a8') for s in statuscounts['Status']]),
+        textinfo='label+percent',
+        textposition='inside'
+    )])
+    
+    figstatus.updatelayout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#e4e6eb', family='Inter'),
+        height=350
+    )
+    st.plotlychart(figstatus, usecontainerwidth=True)
 
-# ==========================================
-# 7. RAW DATA EXPANDER
-# ==========================================
-with st.expander("📋 View Filtered Raw Data"):
-    st.dataframe(filtered_df[['User_ID', 'Full_Name', 'City', 'State', 'Product_Category', 'Product_Name', 'Order_Date', 'Order_Amount_INR', 'Payment_Method', 'Delivery_Status']], use_container_width=True)
+st.markdown("---")
+
+==========================================
+RAW DATA EXPANDER
+==========================================
+with st.expander("📋 View Complete Dataset", expanded=False):
+    st.dataframe(
+        filtered_df[[
+            'UserID', 'FullName', 'City', 'State', 
+            'ProductCategory', 'ProductName', 'Order_Date', 
+            'OrderAmountINR', 'PaymentMethod', 'DeliveryStatus'
+        ]],
+        usecontainerwidth=True,
+        height=400
+    )
+
+Footer
+st.markdown("---")
+st.markdown("""
+
+    🪔 Dasara 2026 E-commerce Analytics Dashboard
+    Powered by Streamlit & Plotly | Built with ❤️ for festive commerce insights
+
+""", unsafeallowhtml=True)
+
+🎨 Key UI/UX Improvements:
+
+Futuristic Dark Theme
+Deep gradient background (navy to dark blue)
+Glassmorphism cards with backdrop blur
+Neon accent colors (cyan, magenta, gold)
+
+Modern Typography
+Space Grotesk for headers (futuristic, geometric)
+Inter for body text (clean, readable)
+Proper hierarchy with letter-spacing
+
+Enhanced Visual Elements
+Animated glow effects on hover
+Gradient text for main header
+Status badges with color coding
+Custom scrollbars with gradients
+
+Better Organization
+Tabbed interface for logical grouping
+Sectioned sidebar filters
+Clear visual hierarchy
+Proper spacing and breathing room
+
+Advanced Charts
+Custom Plotly themes matching the UI
+Gradient fills and markers
+Better hover interactions
+Consistent color palette
+
+Professional Polish
+Glassmorphism KPI cards with icons
+Smooth transitions and animations
+Professional footer
+Responsive layout
+
+The dashboard now looks like a premium SaaS analytics platform with a futuristic, cyberpunk-inspired aesthetic perfect for showcasing festive e-commerce data! 🚀
